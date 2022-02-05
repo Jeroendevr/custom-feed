@@ -1,4 +1,4 @@
 .venv
 .DS_Store
 workspace.code-workspace
-__pycache__/
+__pycache__/*
