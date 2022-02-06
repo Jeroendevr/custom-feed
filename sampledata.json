@@ -1,7 +1,5 @@
 {
-    "programAdmission" : [
-     {"applicationOpen" : "true"},
-     {"applicationType"   : "individual"}
-    ]
+    "id": 1,
+    "name": "Coco",
+    "category": "dog"
 }
-
