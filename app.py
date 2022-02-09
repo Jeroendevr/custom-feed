@@ -4,7 +4,6 @@ from apiflask.validators import Length, OneOf
 from json2xml import json2xml
 from json2xml.utils import readfromjson
 from google.cloud import bigquery
-from sqlite3 import 
 
 def query_stackoverflow():
     client = bigquery.Client()
@@ -25,6 +24,7 @@ def query_stackoverflow():
 
     for row in results:
         print("{} : {} views".format(row.url, row.view_count))
+
 
 
 class PetInSchema(Schema):
