@@ -45,7 +45,7 @@ def index():
     return {'message': 'hello'}
 
 @app.get('/training/<int:pet_id>')
-# @output(PetOutSchema)
+@output(PetOutSchema)
 def get_training(pet_id):
     data = readfromjson("sampledata.json")
     return json2xml.Json2xml(data).to_xml()
