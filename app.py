@@ -3,6 +3,28 @@ from apiflask.fields import Integer, String
 from apiflask.validators import Length, OneOf
 from json2xml import json2xml
 from json2xml.utils import readfromjson
+from google.cloud import bigquery
+from sqlite3 import 
+
+def query_stackoverflow():
+    client = bigquery.Client()
+    query_job = client.query(
+        """
+        SELECT
+          CONCAT(
+            'https://stackoverflow.com/questions/',
+            CAST(id as STRING)) as url,
+          view_count
+        FROM `bigquery-public-data.stackoverflow.posts_questions`
+        WHERE tags like '%google-bigquery%'
+        ORDER BY view_count DESC
+        LIMIT 10"""
+    )
+
+    results = query_job.result()  # Waits for job to complete.
+
+    for row in results:
+        print("{} : {} views".format(row.url, row.view_count))
 
 
 class PetInSchema(Schema):
@@ -19,27 +41,28 @@ app = APIFlask(__name__, title='Wonderful API', version='1.0')
 
 @app.get('/')
 def index():
+    query_stackoverflow()
     return {'message': 'hello'}
 
-@app.get('/pets/<int:pet_id>')
+@app.get('/training/<int:pet_id>')
 # @output(PetOutSchema)
-def get_pet(pet_id):
+def get_training(pet_id):
     data = readfromjson("sampledata.json")
     return json2xml.Json2xml(data).to_xml()
 
 
-@app.post('/pets')
+@app.post('/training')
 @input(PetInSchema)
 def create_pet(data):
     print(data)
     return {'message': 'created'}, 201
 
 
-@app.put('/pets/<int:pet_id>')
+@app.put('/training/<int:pet_id>')
 def update_pet(pet_id):
     return {'message': 'updated'}
 
 
-@app.delete('/pets/<int:pet_id>')
+@app.delete('/training/<int:pet_id>')
 def delete_pet(pet_id):
     return '', 204
